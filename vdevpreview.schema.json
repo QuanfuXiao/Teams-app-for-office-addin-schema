@@ -1042,6 +1042,15 @@
               "activityGroupId": {
                 "type": "string",
                 "maxLength": 64
+              },
+              "allowedIconIds": {
+                "type": "array",
+                "description": "An array containing valid icon's ID per activity type.",
+                "maxItems": 50,
+                "items": {
+                  "type": "string",
+                  "description": "A relative file path to a PNG icon for the given activity type. Size 32x32."
+                }
               }
             },
             "required": [
@@ -1071,6 +1080,29 @@
             "required": [
               "id",
               "displayName"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "activityIcons": {
+          "type": "array",
+          "description": "Specify the customized icons that your app can post to a users activity feed",
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "maxLength": 64
+              },
+              "iconFile": {
+                "type": "string",
+                "maxLength": 128
+              }
+            },
+            "required": [
+              "id",
+              "iconFile"
             ],
             "additionalProperties": false
           }
@@ -2593,11 +2625,11 @@
                   "properties": {
                     "pageId": {
                       "type": "string",
-                      "description": "Used to navigate to the page in MetaOS app."
+                      "description": "Used to navigate to the page in app."
                     },
                     "subpageId": {
                       "type": "string",
-                      "description": "Used to navigate to the subpage in MetaOS app."
+                      "description": "Used to navigate to the subpage in app."
                     }
                   }
                 },
