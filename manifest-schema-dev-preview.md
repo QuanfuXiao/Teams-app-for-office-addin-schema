@@ -883,6 +883,9 @@ The `extensions` property specifies Outlook & WXP Add-ins within an app manifest
 |`autoRunEvents`| Array | | | Defines the event-based activation extension point. |
 |`alternates`| Array | | | Specifies the relationship to alternate existing Microsoft 365 solutions. It's used to hide or prioritize add-ins from the same publisher with overlapping functionality. |
 |`audienceClaimUrl`| String | 2048 characters | | Specifies the URL for your extension and is used to validate Exchange user identity tokens. For more information, see [inside the Exchange identity token](/office/dev/add-ins/outlook/inside-the-identity-token)|
+| `contentRuntimes`  | Array | | | Content runtime is for "ContentApp", which can be embedded directly into Excel or PowerPoint documents. |
+| `getStartedMessages` | Array | | | Provides information used by the callout that appears when the add-in is installed.|
+| `contextMenus` | Array | | | A context menu is a shortcut menu that appears when you right-click in the Office UI. | 
 
 For more information, see [Office Add-ins manifest for Microsoft 365](/office/dev/add-ins/develop/unified-manifest-overview).
 
@@ -896,7 +899,7 @@ The `extensions.requirements` property specifies the [requirement sets](/javascr
 |`requirements.capabilities.name`| String | | ✔️ | Identifies the name of the requirement sets. |
 |`requirements.capabilities.minVersion`| String | | | Identifies the minimum version for the requirement sets. |
 |`requirements.capabilities.maxVersion`| String | | | Identifies the maximum version for the requirement sets. |
-|`requirements.scopes`| Array of enums | 1 | | Identifies the scopes in which the add-in can run and defines the Microsoft 365 applications in which the extension can run. For example, `mail` (Outlook). <br>Supported value: `mail` |
+|`requirements.scopes`| Array of enums | 1 | | Identifies the scopes in which the add-in can run and defines the Microsoft 365 applications in which the extension can run. For example, `mail` (Outlook). <br>Supported value: `mail`(Outlook), `workbook`(Excel), `document`(Word), `presentation`(PowerPoint) |
 |`requirements.formFactors`| Array of enums | | | Identifies the form factors that support the add-in. <br>Supported values: `mobile`, `desktop`|
 
 ### extensions.runtimes
@@ -928,7 +931,7 @@ The `extensions.ribbons` property provides the ability to add [add-in commands](
 
 |Name| Type| Maximum size | Required | Description|
 |---|---|---|---|---|
-|`contexts`| Array | 7 | | Specifies the Microsoft 365 application window in which the ribbon customization is available to the user. Each item in the array is a member of a string array. <br>Supported values: `mailRead`, `mailCompose`, `meetingDetailsOrganizer`, `meetingDetailsAttendee`, `onlineMeetingDetailsOrganizer`, `logEventMeetingDetailsAttendee`, `default`|
+|`contexts`| Array | 7 | | Specifies the Microsoft 365 application window in which the ribbon customization is available to the user. Each item in the array is a member of a string array. <br>Supported values: `mailRead`, `mailCompose`, `meetingDetailsOrganizer`, `meetingDetailsAttendee`, `onlineMeetingDetailsOrganizer`, `logEventMeetingDetailsAttendee`, `default`(for WXP)|
 |`tabs`| Array | |✔️| Configures the custom tabs on the Microsoft 365 application ribbon. |
 |`tabs.id`| String | 64 characters | | Specifies the ID for the tab within the app.|
 |`tabs.builtinTabId`| String | 64 characters | | Specifies the ID of a built-in Office ribbon tab. The possible values vary by Office host application. Currently, only Outlook add-ins are supported and the only allowed value for Outlook is "DefaultTab". The default tab depends on where the Outlook add-in is surfaced, as determined in the "extensions.ribbons.contexts" property. In the main Outlook window, it is the **Home** tab, in a message window, it is the **Message** tab, and in a meeting window, it is the **Meeting** tab. |
@@ -1019,6 +1022,41 @@ The `extensions.alternates` property is used to hide or prioritize specific in-m
 |`alternateIcons.highResolutionIcon`| Object | | ✔️ | Specifies the size and URL of the image file that is used to represent the add-in on high DPI screens. The image must be in one of the following file formats: GIF, JPG, PNG, EXIF, BMP, or TIFF. |
 |`alternateIcons.highResolutionIcon.size`| Number enum | | ✔️ | This property is not currently used. The icon that the "highResolutionIcon.url" property points to must be 128 x 128 pixels.|
 |`alternateIcons.highResolutionIcon.url`| String | 2048 characters | ✔️ | Specifies the full, absolute URL of the image file that is used to represent the add-in on high DPI screens. |
+
+### extensions.contentRuntimes
+
+This is the runtime for content add-in.
+
+|Name| Type| Maximum size | Required | Description|
+|---|---|---|---|---|
+|`id`|string|64 characters|✔️|A unique identifier for this runtime within the app.  This is developer specified.
+|`code`| Object | | ✔️ | Specifies the location of code for the runtime. Based on `runtime.type`, add-ins can use either a JavaScript file or an HTML page with an embedded `script` tag that specifies the URL of a JavaScript file. Both URLs are necessary in situations where the `runtime.type` is uncertain. |
+|`code.page`| URL | | ✔️ | Specifies the URL of the web page that contains an embedded `script` tag, which specifies the URL of a JavaScript file (to be loaded in a [browser-based runtime](/office/dev/add-ins/testing/runtimes#browser-runtime)). |
+|`code.script`| URL | |  | Specifies the URL of the JavaScript file to be loaded in [JavaScript-only runtime](/office/dev/add-ins/testing/runtimes#javascript-only-runtime). |
+|`requestedWidth`|number| | |The desired width in pixels for the initial content placeholder. This value MUST be between 32 and 1000 pixels. Default value will be determined by host.||
+|`requestedHeight`|number| | |The desired height in pixels for the initial content placeholder. This value MUST be between 32 and 1000 pixels. Default value will be determined by host.||
+| `disableSnapshot`  | boolean | |  | Specifies whether a snapshot image of your content add-in is saved with the host document. Default value is `false`. Set `true` to disable.||
+
+### extensions.getStartedMessages
+
+Specifies the Get Started information for the Office add-in. This information is used at various places on the Office User Interface after user installs an add-in.
+
+|Name| Type| Maximum size | Required | Description|
+|---|---|---|---|---|
+|`title`|string|125 characters | ✔️|The title used for the top of the callout.|
+|`description`|string|250 characters |✔️|	The description / body content for the callout.|
+|`learnMoreUrl`|url|2048 characters |✔️ |	A URL to a page that explains the add-in in detail.|
+
+### extensions.contextMenus
+
+A context menu is a shortcut menu that appears when you right-click in the Office UI.
+
+|Name| Type| Maximum size | Required | Description|
+|---|---|---|---|---|
+|`menus`|Array| | ✔️|The title used for the top of the callout. |
+|`menus.entryPoint`|String enum||✔️|Use `text` or `cell` here for Office context menu. Use `text` if the context menu should open when a user right-clicks on the selected text. Use `cell` if the context menu should open when the user right-clicks on a cell on an Excel spreadsheet.
+|`menus.controls`|Array| | ✔️|The same as controls in ribbons. The control type should be `menu` |
+
 
 ## actions
 
