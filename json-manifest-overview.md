@@ -91,6 +91,9 @@ The following table shows a mapping of some high level child properties of the "
 | "alternatives" | Specifies backwards compatibility with an equivalent COM add-in, XLL, or both. | **\<EquivalentAddins\>** | See the [EquivalentAddins - See also](https://learn.microsoft.com/en-us/javascript/api/manifest/equivalentaddins?view=common-js-preview#see-also) for background information. |
 | "runtimes"  | Configures the [embedded runtimes](https://learn.microsoft.com/en-us/office/dev/add-ins/testing/runtimes) that the add-in uses, including various kinds of add-ins that have little or no UI, such as custom function-only add-ins and [function commands](https://learn.microsoft.com/en-us/office/dev/add-ins/design/add-in-commands#types-of-add-in-commands). | **\<Runtimes\>**. **\<FunctionFile\>**, and **\<ExtensionPoint\>** (of type CustomFunctions) |*None.* |
 | "autoRunEvents" | Configures an event handler for a specified event. | **\<ExtensionPoint\>** (of type LaunchEvent) |*None.* |
+| "contentRuntimes" |Configures the runtimes that the content add-in uses. | **\<OfficeApp\>** (of type ContentApp) **\<DefaultSettings\>** **\<AllowSnapshot\>**|*None.* |
+| "getStartedMessages" | Specifies the Get Started information for the Office add-in. | **\<GetStarted\>** (child of **\<DesktopFormFactor\>**) |*None.* |
+| "contextMenus" | A context menu is a shortcut menu that appears when you right-click in the Office UI. | **\<ExtensionPoint\>** (of type ContextMenu) |*None.* |
 
 #### "ribbons" table
 
@@ -99,6 +102,6 @@ The following table maps the child properties of the anonymous child objects in 
 |JSON property|Purpose|XML elements|Comments|
 |:-----|:-----|:-----|:-----|
 | "contexts" | Specifies the command surfaces that the add-in customizes. | various **\*CommandSurface** elements, such as **PrimaryCommandSurface** and **MessageReadCommandSurface** |*None.* |
-| "tabs" | Configures custom ribbon tabs. | **\<CustomTab\>** | The names and hierarchy of the descendant properties of "tabs" closely match the descendants of **\<CustomTab\>**.  |
+| "tabs" | Configures custom ribbon tabs. | **\<CustomTab\>** **\<OfficeTab\>** **\<OfficeMenu\>**| The names and hierarchy of the descendant properties of "tabs" closely match the descendants of **\<CustomTab\>**.  |
 
 For a full sample unified manifest, see [Sample preview unified manifest](https://learn.microsoft.com/en-us/office/dev/add-ins/develop/unified-manifest-overview#sample-preview-unified-manifest).
